@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.dao.UserMapper">
+    <select id="queryUser" resultType="User">
+        select * from user where uname=#{uname} and password=#{password} and rights=#{rights};
+    </select>
+    <insert id="addUser" parameterType="User">
+        insert into user (uname,password,rights)
+        values (#{uname},#{password},#{rights});
+    </insert>
+    <insert id="addGood" parameterType="Goods">
+        insert into goods (gname,price,image,uid,amount)
+        values (#{gname},#{price},#{image},#{uid},#{amount});
+    </insert>
+    <select id="queryAllGoods" resultType="Goods">
+        select * from goods where uid=#{uid};
+    </select>
+    <select id="queryGoodById" resultType="Goods">
+        select * from goods where uid=#{uid} and gid=#{gid};
+    </select>
+    <update id="updateGood" parameterType="Goods">
+        update goods set gname=#{gname},price=#{price},image=#{image},amount=#{amount} where gid=#{gid} and uid=#{uid};
+    </update>
+    <update id="updateGoodBasicInfo" parameterType="Goods">
+        update goods set gname=#{gname},price=#{price},amount=#{amount} where gid=#{gid} and uid=#{uid};
+    </update>
+    <delete id="deleteGoodById" parameterType="Goods">
+        delete from goods where uid=#{uid} and gid=#{gid};
+    </delete>
+    <select id="queryUid" resultType="int">
+        select uid from user where uname=#{uname};
+    </select>
+    <select id="queryGoods" resultType="Goods">
+        select * from goods;
+    </select>
+    <select id="queryGoodsByName" resultType="Goods">
+        select * from goods where gname LIKE CONCAT('%', #{name}, '%');
+    </select>
+    <update id="addCart" parameterType="Goods">
+        update goods set cart=cart+1 where uid=#{uid} and gid=#{gid} and consumer=#{consumer};
+    </update>
+    <select id="queryUidByGid" resultType="int">
+        select uid from goods where gid=#{gid};
+    </select>
+    <update id="updateConsumer" parameterType="int">
+        update goods set consumer=#{uid} where gid=#{gid};
+    </update>
+    <select id="updateGoodByGid" parameterType="Integer">
+        update goods set cart=0 where consumer=#{consumer};
+    </select>
+</mapper>

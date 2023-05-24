@@ -40,7 +40,7 @@ public class UserController {
         return "addGood";
     }
     @RequestMapping("/addGood")
-    public String addGoods(@RequestParam("gname") String gname,@RequestParam("price") double price,@RequestParam("amount") int amount,@RequestParam("uid") int uid,@RequestParam("file") MultipartFile file)throws IOException {
+    public String addGoods(@RequestParam("gname") String gname,@RequestParam("price") String price,@RequestParam("amount") int amount,@RequestParam("uid") int uid,@RequestParam("file") MultipartFile file)throws IOException {
         Goods goods = new Goods();
         goods.setAmount(amount);
         goods.setUid(uid);
@@ -147,7 +147,11 @@ public class UserController {
         return "redirect:/user/goLogin";
     }
     @RequestMapping("/MyCart")
-    public String myCart(){
+    public String myCart(HttpSession session){
+        List<Goods> list=new ArrayList<Goods>();
+        int uid= (int) session.getAttribute("UID");
+        list= userService.queryGoodsByIdAndCart(uid);
+        session.setAttribute("list1",list);
         return "cart";
     }
 //    @RequestMapping("/isCourseExist")

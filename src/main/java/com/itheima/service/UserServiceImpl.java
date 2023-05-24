@@ -91,4 +91,9 @@ public class UserServiceImpl implements UserService{
     public Integer updateGoodByGid(int consumer) {
         return userMapper.updateGoodByGid(consumer);
     }
+
+    @Override
+    public List<Goods> queryGoodsByIdAndCart(int uid) {
+        return userMapper.queryGoodsByIdAndCart(uid);
+    }
 }

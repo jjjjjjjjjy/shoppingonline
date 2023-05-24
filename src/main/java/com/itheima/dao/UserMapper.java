@@ -37,4 +37,6 @@ public interface UserMapper {
     int updateConsumer(@Param("uid")int uid,@Param("gid")int gid);
 
     Integer updateGoodByGid(@Param("consumer")int consumer);
+
+    List<Goods> queryGoodsByIdAndCart(@Param("uid") int uid);
 }

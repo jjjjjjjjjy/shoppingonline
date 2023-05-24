@@ -5,9 +5,9 @@ public class Order {
     private int gid;
     private int amount;
     private String address;
-    private double price;
+    private String price;
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -27,7 +27,7 @@ public class Order {
         this.gid = gid;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 

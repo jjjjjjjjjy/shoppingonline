@@ -35,4 +35,6 @@ public interface UserService {
     int updateConsumer(int uid,int gid);
 
     Integer updateGoodByGid(int consumer);
+
+    List<Goods> queryGoodsByIdAndCart(int uid);
 }

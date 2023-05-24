@@ -50,4 +50,7 @@
     <select id="updateGoodByGid" parameterType="Integer">
         update goods set cart=0 where consumer=#{consumer};
     </select>
+    <select id="queryGoodsByIdAndCart" resultType="Goods">
+        select * from goods where consumer=#{uid} and cart>0;
+    </select>
 </mapper>

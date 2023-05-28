@@ -34,7 +34,7 @@
     <ul class="l1">
         <li>欢迎您：${USER_SESSION.uname}，您的商家编号为：${UID}</li>
         <li>点此<a href="${pageContext.request.contextPath}/user/goOut" class="a1">注销</a></li>
-        <li><a href="#" class="a1">订单管理</a></li>
+        <li><a href="${pageContext.request.contextPath}/OrderManage" class="a1">订单管理</a></li>
         <li><a href="${pageContext.request.contextPath}/toAddGood" class="a1">新增商品</a></li>
     </ul>
 </div>

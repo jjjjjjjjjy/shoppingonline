@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class Goods {
     private int gid;
     private String gname;
-    private String price;
+    private double price;
     private String image;
     private int uid;
     private int amount;
@@ -71,11 +71,11 @@ public class Goods {
         return gname;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 

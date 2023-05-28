@@ -5,9 +5,36 @@ public class Order {
     private int gid;
     private int amount;
     private String address;
-    private String price;
+    private double price;
+    private String situation;
+    private int consumer;
+    private int uid;
 
-    public void setPrice(String price) {
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setConsumer(int consumer) {
+        this.consumer = consumer;
+    }
+
+    public int getConsumer() {
+        return consumer;
+    }
+
+    public void setSituation(String situation) {
+        this.situation = situation;
+    }
+
+    public String getSituation() {
+        return situation;
+    }
+
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -27,7 +54,7 @@ public class Order {
         this.gid = gid;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -45,5 +72,10 @@ public class Order {
 
     public void setOid(int oid) {
         this.oid = oid;
+    }
+
+    @Override
+    public String toString() {
+        return "Order--->"+oid+","+gid+","+amount+","+address+","+price+","+situation;
     }
 }

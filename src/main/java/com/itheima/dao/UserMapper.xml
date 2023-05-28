@@ -53,4 +53,29 @@
     <select id="queryGoodsByIdAndCart" resultType="Goods">
         select * from goods where consumer=#{uid} and cart>0;
     </select>
+    <update id="updateCartByGid" parameterType="int">
+        update goods set cart=0 where gid=#{gid};
+    </update>
+    <insert id="addOrderInfo" parameterType="Order">
+        insert into `order` (gid,amount,address,price,situation,consumer,uid)
+        values (#{gid},#{amount},#{address},#{price},'未发货',#{consumer},#{uid});
+        <selectKey keyProperty="oid" resultType="int">
+            SELECT LAST_INSERT_ID() as oid;
+        </selectKey>
+    </insert>
+    <select id="queryOrderByOid" resultType="Order">
+        select * from `order` where oid=#{oid};
+    </select>
+    <update id="updateGoodAmount" parameterType="int">
+        update goods set amount=amount-goods.cart where gid=#{gid};
+    </update>
+    <select id="queryOrderByConsumer" resultType="Order">
+        select * from `order` where consumer=#{consumer};
+    </select>
+    <select id="queryOrderByUid" resultType="Order">
+        select * from `order` where uid=#{uid};
+    </select>
+    <update id="updateOrderStatus" parameterType="Order">
+        update `order` set situation='已发货' where oid=#{oid};
+    </update>
 </mapper>

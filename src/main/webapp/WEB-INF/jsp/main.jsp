@@ -64,6 +64,19 @@
             color: #3e8e41;
             font-weight: bold;
         }
+        .addcart{
+            font-size: 14px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff6600;
+            color: #333;
+            cursor: pointer;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -78,7 +91,7 @@
             <input type="submit" value="搜索" id="search-btn">
         </form>
         <div id="cart">
-            <a href="${pageContext.request.contextPath}/MyCart">我的购物车</a>
+            <button class="addcart"><a href="${pageContext.request.contextPath}/MyCart">我的购物车</a></button>
             <img src="${pageContext.request.contextPath}/statics/img/cart.png" height="60px" width="60px">
         </div>
     </div>
@@ -87,7 +100,7 @@
     <ul>
         <li>欢迎您：${USER_SESSION.uname}，您的用户编号为：${USER_SESSION.uid}</li>
         <li><a href="${pageContext.request.contextPath}/goOut" class="a1">注销</a></li>
-        <li><a href="#" class="a1">我的订单</a></li>
+        <li><a href="${pageContext.request.contextPath}/goMyOrder" class="a1">我的订单</a></li>
     </ul>
 </div>
 <table class="table table-bordered table-striped mt-3">

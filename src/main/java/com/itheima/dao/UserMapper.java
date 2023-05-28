@@ -1,8 +1,10 @@
 package com.itheima.dao;
 
 import com.itheima.pojo.Goods;
+import com.itheima.pojo.Order;
 import com.itheima.pojo.User;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -39,4 +41,19 @@ public interface UserMapper {
     Integer updateGoodByGid(@Param("consumer")int consumer);
 
     List<Goods> queryGoodsByIdAndCart(@Param("uid") int uid);
+
+    int updateCartByGid(@RequestParam("gid") int gid);
+
+    int addOrderInfo(Order order);
+//    int addOrderInfo(@Param("gid")int gid, @Param("amount")int amount, @Param("address")String address, @Param("price")double price, @Param("consumer")int consumer);
+
+    Order queryOrderByOid(int oid);
+
+    int updateGoodAmount(@Param("gid") int gid);
+
+    List<Order> queryOrderByConsumer(@Param("consumer") int consumer);
+
+    List<Order> queryOrderByUid(int uid);
+
+    void updateOrderStatus(int oid);
 }

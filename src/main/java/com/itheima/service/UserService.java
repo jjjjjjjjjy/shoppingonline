@@ -1,7 +1,10 @@
 package com.itheima.service;
 
 import com.itheima.pojo.Goods;
+import com.itheima.pojo.Order;
 import com.itheima.pojo.User;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -37,4 +40,16 @@ public interface UserService {
     Integer updateGoodByGid(int consumer);
 
     List<Goods> queryGoodsByIdAndCart(int uid);
+
+    int updateCartByGid(@RequestParam("gid") int gid);
+
+    int addOrderInfo(Order order);
+
+    int updateGoodAmount(int gid);
+
+    List<Order> queryOrderByConsumer(int consumer);
+
+    List<Order> queryOrderByUid(int uid);
+
+    void updateOrderStatus(int oid);
 }

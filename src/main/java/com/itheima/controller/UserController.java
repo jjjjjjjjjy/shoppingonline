@@ -1,16 +1,18 @@
 package com.itheima.controller;
 
 import com.itheima.pojo.Goods;
+import com.itheima.pojo.Order;
 import com.itheima.service.UserService;
 import com.itheima.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +42,7 @@ public class UserController {
         return "addGood";
     }
     @RequestMapping("/addGood")
-    public String addGoods(@RequestParam("gname") String gname,@RequestParam("price") String price,@RequestParam("amount") int amount,@RequestParam("uid") int uid,@RequestParam("file") MultipartFile file)throws IOException {
+    public String addGoods(@RequestParam("gname") String gname,@RequestParam("price") double price,@RequestParam("amount") int amount,@RequestParam("uid") int uid,@RequestParam("file") MultipartFile file)throws IOException {
         Goods goods = new Goods();
         goods.setAmount(amount);
         goods.setUid(uid);
@@ -143,7 +145,7 @@ public class UserController {
     @RequestMapping("/goOut")
     public String goOut(HttpSession session){
         int uid= (int) session.getAttribute("UID");
-        Integer q = userService.updateGoodByGid(uid);
+        userService.updateGoodByGid(uid);
         return "redirect:/user/goLogin";
     }
     @RequestMapping("/MyCart")
@@ -153,6 +155,95 @@ public class UserController {
         list= userService.queryGoodsByIdAndCart(uid);
         session.setAttribute("list1",list);
         return "cart";
+    }
+    @RequestMapping(value="/removeCart/{gid}",method= RequestMethod.POST)
+    @ResponseBody
+    public String removeCart(@PathVariable("gid")int gid)
+    {
+        try{
+        userService.updateCartByGid(gid);
+        return "success";
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e);
+            return "fail";
+        }
+    }
+    @RequestMapping("/goPay")
+    public String goPay(HttpServletRequest request,HttpSession session){
+        List<Goods> list=new ArrayList<Goods>();
+        int uid,count,gid;
+        double allprice=0;
+        String[] selectedRows = request.getParameter("selectedRows").split(";");
+        String[][] rows = new String[selectedRows.length][4];
+        for (int i = 0; i < selectedRows.length; i++) {
+            String[] row = selectedRows[i].split(",");
+            for (int j = 0; j < 4; j++) {
+                rows[i][j] = row[j];
+            }
+        }
+        for(int i=0;i<selectedRows.length;i++){
+            uid= Integer.parseInt(rows[i][0]);
+            count= Integer.parseInt(rows[i][1]);
+            allprice+=Double.parseDouble(rows[i][2]);
+            gid= Integer.parseInt(rows[i][3]);
+            System.out.println("uid:"+uid+",count:"+count+",gid:"+gid);
+            list.add(userService.queryGoodById(uid,gid));
+            session.setAttribute("list2",list);
+        }
+        session.setAttribute("TOTAL",allprice);
+        return "order";
+    }
+    @RequestMapping("/addOrder")
+    public String addOrder(HttpSession session, @RequestParam("address") String address){
+        List<Goods> list= (List<Goods>) session.getAttribute("list2");
+        List<Order> list1=new ArrayList<Order>();
+        session.setAttribute("Address",address);
+        for (Goods goods : list) {
+            Order order=new Order();
+            order.setGid(goods.getGid());
+            order.setAmount(goods.getCart());
+            order.setAddress(address);
+            order.setUid(goods.getUid());
+            order.setPrice(goods.getPrice()*goods.getCart());
+            order.setSituation("未发货");
+            order.setConsumer(goods.getConsumer());
+            userService.addOrderInfo(order);
+            list1.add(order);
+            userService.updateGoodAmount(goods.getGid());
+            userService.updateCartByGid(goods.getGid());
+        }
+        System.out.println(list1);
+        session.setAttribute("Order",list1);
+        return "MyOrder";
+    }
+    @RequestMapping("/goMyOrder")
+    public ModelAndView order(HttpSession session){
+        List<Order> list= new ArrayList<>();
+        ModelAndView mv = new ModelAndView("MyOrder");
+        int uid= (int) session.getAttribute("UID");
+        list=userService.queryOrderByConsumer(uid);
+        mv.addObject("MyOrder",list);
+        mv.addObject("UserService",userService);
+        return mv ;
+    }
+
+    @RequestMapping("/OrderManage")
+    public ModelAndView orderManage(HttpSession session){
+        List<Order> list= new ArrayList<>();
+        int uid= (int) session.getAttribute("UID");
+        list=userService.queryOrderByUid(uid);
+        ModelAndView mv = new ModelAndView("orderManage");
+        mv.addObject("OrderManage", list);
+        mv.addObject("UserService", userService);
+        return mv;
+    }
+    @RequestMapping("/deliver")
+    public String deliverOrder(@RequestParam("oid") int oid) {
+        // 根据订单号更新数据库中的订单状态为已发货
+        userService.updateOrderStatus(oid);
+        return "redirect:/orderManage"; // 重定向到订单管理页面
     }
 //    @RequestMapping("/isCourseExist")
 //    public void isCourseExit(String name, HttpServletResponse response) throws IOException {

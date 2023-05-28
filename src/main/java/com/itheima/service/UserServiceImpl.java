@@ -2,6 +2,7 @@ package com.itheima.service;
 
 import com.itheima.dao.UserMapper;
 import com.itheima.pojo.Goods;
+import com.itheima.pojo.Order;
 import com.itheima.pojo.User;
 
 import java.util.List;
@@ -95,5 +96,35 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<Goods> queryGoodsByIdAndCart(int uid) {
         return userMapper.queryGoodsByIdAndCart(uid);
+    }
+
+    @Override
+    public int updateCartByGid(int gid) {
+        return userMapper.updateCartByGid(gid);
+    }
+
+    @Override
+    public int addOrderInfo(Order order) {
+        return userMapper.addOrderInfo(order);
+    }
+
+    @Override
+    public int updateGoodAmount(int gid) {
+        return userMapper.updateGoodAmount(gid);
+    }
+
+    @Override
+    public List<Order> queryOrderByConsumer(int consumer) {
+        return userMapper.queryOrderByConsumer(consumer);
+    }
+
+    @Override
+    public List<Order> queryOrderByUid(int uid) {
+        return userMapper.queryOrderByUid(uid);
+    }
+
+    @Override
+    public void updateOrderStatus(int oid) {
+        userMapper.updateOrderStatus(oid);
     }
 }

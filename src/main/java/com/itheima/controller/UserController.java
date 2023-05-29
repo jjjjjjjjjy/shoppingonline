@@ -4,6 +4,7 @@ import com.itheima.pojo.Goods;
 import com.itheima.pojo.Order;
 import com.itheima.service.UserService;
 import com.itheima.service.UserServiceImpl;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -42,12 +43,13 @@ public class UserController {
         return "addGood";
     }
     @RequestMapping("/addGood")
-    public String addGoods(@RequestParam("gname") String gname,@RequestParam("price") double price,@RequestParam("amount") int amount,@RequestParam("uid") int uid,@RequestParam("file") MultipartFile file)throws IOException {
+    public String addGoods(@RequestParam("gname") String gname, @RequestParam("price") double price, @RequestParam("amount") int amount, @RequestParam("uid") int uid, @RequestParam("file") MultipartFile file, @Param("category") String category)throws IOException {
         Goods goods = new Goods();
         goods.setAmount(amount);
         goods.setUid(uid);
         goods.setGname(gname);
         goods.setPrice(price);
+        goods.setCategory(category);
         Map<String,Object> result=new HashMap<>();
             if (!file.isEmpty()) {
                 //原始文件名称
@@ -216,7 +218,7 @@ public class UserController {
         }
         System.out.println(list1);
         session.setAttribute("Order",list1);
-        return "MyOrder";
+        return "redirect:/goMyOrder";//重定向到我的订单
     }
     @RequestMapping("/goMyOrder")
     public ModelAndView order(HttpSession session){
@@ -233,7 +235,7 @@ public class UserController {
     public ModelAndView orderManage(HttpSession session){
         List<Order> list= new ArrayList<>();
         int uid= (int) session.getAttribute("UID");
-        list=userService.queryOrderByUid(uid);
+            list=userService.queryOrderByUid(uid);
         ModelAndView mv = new ModelAndView("orderManage");
         mv.addObject("OrderManage", list);
         mv.addObject("UserService", userService);
@@ -244,6 +246,16 @@ public class UserController {
         // 根据订单号更新数据库中的订单状态为已发货
         userService.updateOrderStatus(oid);
         return "redirect:/orderManage"; // 重定向到订单管理页面
+    }
+    @RequestMapping("/unshipped")
+    public ModelAndView unshipped(HttpSession session) {
+        List<Order> list= new ArrayList<>();
+        int uid= (int) session.getAttribute("UID");
+        list=userService.queryOrderByUidAndSituation(uid,"未发货");
+        ModelAndView mv = new ModelAndView("orderManage");
+        mv.addObject("OrderManage", list);
+        mv.addObject("UserService", userService);
+        return mv;
     }
 //    @RequestMapping("/isCourseExist")
 //    public void isCourseExit(String name, HttpServletResponse response) throws IOException {

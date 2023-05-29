@@ -56,4 +56,6 @@ public interface UserMapper {
     List<Order> queryOrderByUid(int uid);
 
     void updateOrderStatus(int oid);
+
+    List<Order> queryOrderByUidAndSituation(@Param("uid") int uid,@Param("situation") String situation);
 }

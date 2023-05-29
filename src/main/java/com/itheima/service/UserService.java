@@ -52,4 +52,6 @@ public interface UserService {
     List<Order> queryOrderByUid(int uid);
 
     void updateOrderStatus(int oid);
+
+    List<Order> queryOrderByUidAndSituation(int uid, String situation);
 }

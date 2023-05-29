@@ -11,8 +11,8 @@
         values (#{uname},#{password},#{rights});
     </insert>
     <insert id="addGood" parameterType="Goods">
-        insert into goods (gname,price,image,uid,amount)
-        values (#{gname},#{price},#{image},#{uid},#{amount});
+        insert into goods (gname,price,image,uid,amount,category)
+        values (#{gname},#{price},#{image},#{uid},#{amount},#{category});
     </insert>
     <select id="queryAllGoods" resultType="Goods">
         select * from goods where uid=#{uid};
@@ -21,10 +21,10 @@
         select * from goods where uid=#{uid} and gid=#{gid};
     </select>
     <update id="updateGood" parameterType="Goods">
-        update goods set gname=#{gname},price=#{price},image=#{image},amount=#{amount} where gid=#{gid} and uid=#{uid};
+        update goods set gname=#{gname},price=#{price},image=#{image},amount=#{amount},category=#{category} where gid=#{gid} and uid=#{uid};
     </update>
     <update id="updateGoodBasicInfo" parameterType="Goods">
-        update goods set gname=#{gname},price=#{price},amount=#{amount} where gid=#{gid} and uid=#{uid};
+        update goods set gname=#{gname},price=#{price},amount=#{amount},category=#{category} where gid=#{gid} and uid=#{uid};
     </update>
     <delete id="deleteGoodById" parameterType="Goods">
         delete from goods where uid=#{uid} and gid=#{gid};
@@ -78,4 +78,7 @@
     <update id="updateOrderStatus" parameterType="Order">
         update `order` set situation='已发货' where oid=#{oid};
     </update>
+    <select id="queryOrderByUidAndSituation" resultType="Order">
+        select * from `order` where uid=#{uid} and situation=#{situation};
+    </select>
 </mapper>

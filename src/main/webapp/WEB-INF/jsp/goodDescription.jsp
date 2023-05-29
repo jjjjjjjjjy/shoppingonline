@@ -9,7 +9,7 @@
     <meta name="description"
           content="YTWO-SHOP-专业的综合网上购物商城，为您提供正品低价的购物选择、优质便捷的服务体验。商品来自全球数十万品牌商家，囊括家电、手机、电脑、服装、居家、母婴、美妆、个护、食品、生鲜等丰富品类，满足各种购物需求。"/>
     <meta name="Keywords" content="网上购物,网上商城,家电,手机,电脑,服装,居家,母婴,美妆,个护,食品,生鲜"/>
-<%--    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">--%>
+    <%--    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">--%>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
 
@@ -18,6 +18,10 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <%--    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">--%>
+    <%--    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">--%>
+    <%--    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>--%>
+    <%--    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>--%>
     <link rel="icon" href="${pageContext.request.contextPath}/statics/img/favicon.ico" mce_href="${pageContext.request.contextPath}/statics/img/favicon.ico" type="image/x-icon"/>
     <style>
         #shop{
@@ -111,15 +115,34 @@
         <li><a href="${pageContext.request.contextPath}/goMyOrder" class="a1">我的订单</a></li>
     </ul>
 </div>
-    <c:forEach items="${List}" var="product">
-        <div class="col-md-3">
-            <div class="thumbnail">
-                <img src="${pageContext.request.contextPath}/statics/img/${product.image}" alt="${product.gname}" height="50">
-                <div class="caption">
-                    <h4>${product.gname}</h4>
-                </div>
-            </div>
-        </div>
+<table class="table table-bordered table-striped mt-3">
+    <!-- 表格内容 -->
+    <thead>
+    <tr>
+        <th>商品编号</th>
+        <th>封面图</th>
+        <th>商品名</th>
+        <th>数量</th>
+        <th>价格</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach var="goods" items="${List}">
+        <tr>
+            <td>${goods.gid}</td>
+            <td>
+                <img src="${pageContext.request.contextPath}/statics/img/${goods.image}" height="100" alt="${goods.gname}的封面图"/>
+            </td>
+            <td>${goods.gname}</td>
+            <td>${goods.amount}</td>
+            <td>${goods.price}</td>
+            <td>
+                <a href="${pageContext.request.contextPath}/addCart?gid=${goods.gid}" class="btn btn-primary">加入购物车</a>
+            </td>
+        </tr>
     </c:forEach>
+    </tbody>
+</table>
 </body>
 </html>

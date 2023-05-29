@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +31,7 @@
         </li>
     </ul>
 </div>
+<form action="${pageContext.request.contextPath}/queryGoods">
 <div id="shop" >
     <div>
         <img src="${pageContext.request.contextPath}/statics/img/logo.png" width="60px" height="60px">YTWO-SHOP
@@ -39,11 +41,48 @@
         <input type="submit" value="搜索">
         <a href="#">我的购物车</a><img src="${pageContext.request.contextPath}/statics/img/cart.png" height="60px" width="60px">
     </div>
+    <c:forEach items="${List}" var="product">
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <img src="${product.image}" alt="${product.gname}">
+                <div class="caption">
+                    <h4>${product.gname}</h4>
+                    <p><a href="#" class="btn btn-primary" role="button">查看详情</a></p>
+                </div>
+            </div>
+        </div>
+    </c:forEach>
 </div>
-
-
-<table>
-
-</table>
+</form>
 </body>
-</html>
+<%--</html>--%>
+<%--<!--分类标签-->--%>
+<%--<div id="category">--%>
+<%--    <a href="#" class="category-item" data-category="1">家电</a>--%>
+<%--    <a href="#" class="category-item" data-category="2">服装</a>--%>
+<%--    <a href="#" class="category-item" data-category="3">美妆</a>--%>
+<%--    <!--其他分类标签-->--%>
+<%--</div>--%>
+
+<%--<!--商品展示区域-->--%>
+<%--<div id="product-list">--%>
+<%--    <!--商品列表-->--%>
+<%--</div>--%>
+
+<%--<script>--%>
+<%--    $(function() {--%>
+<%--        //点击分类标签获取对应分类的商品信息--%>
+<%--        $('#category').on('click', '.category-item', function() {--%>
+<%--            var category = $(this).data('category');--%>
+<%--            $.ajax({--%>
+<%--                url: '/product/list',--%>
+<%--                type: 'get',--%>
+<%--                data: {category: category},--%>
+<%--                success: function(data) {--%>
+<%--                    //将获取到的商品信息展示在页面上--%>
+<%--                    //...--%>
+<%--                }--%>
+<%--            });--%>
+<%--        });--%>
+<%--    });--%>
+<%--</script>--%>

@@ -127,4 +127,9 @@ public class UserServiceImpl implements UserService{
     public void updateOrderStatus(int oid) {
         userMapper.updateOrderStatus(oid);
     }
+
+    @Override
+    public List<Order> queryOrderByUidAndSituation(int uid, String situation) {
+        return userMapper.queryOrderByUidAndSituation(uid,situation);
+    }
 }

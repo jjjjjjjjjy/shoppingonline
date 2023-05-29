@@ -12,8 +12,17 @@ public class Goods {
     private int cart;
     private int consumer;
     private MultipartFile file;
+    private  String category;
 
     public Goods() {
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public void setConsumer(int consumer) {

@@ -53,11 +53,6 @@
         th {
             background-color: #f2f2f2;
         }
-        .total {
-            font-weight: bold;
-            text-align: right;
-            padding-right: 10px;
-        }
 
         input[type="checkbox"] {
             margin-right: 10px;
@@ -83,16 +78,18 @@
 <body>
 <h1>订单管理</h1>
 <button ><a href="${pageContext.request.contextPath}/allGoods">返回</a> </button>
+<button ><a href="${pageContext.request.contextPath}/OrderManage">所有订单</a> </button>
+<button ><a href="${pageContext.request.contextPath}/unshipped">未发货订单</a> </button>
 <table>
     <thead>
     <tr>
-        <th>用户ID</th>
+        <th>订单编号</th>
         <th>商品名</th>
         <th>商品封面图</th>
         <th>数量</th>
         <th>总价</th>
+        <th>用户ID</th>
         <th>收获地址</th>
-        <th>订单编号</th>
         <th>发货状态</th>
         <th>操作</th>
     </tr>
@@ -100,21 +97,22 @@
     <tbody>
     <c:forEach var="order" items="${OrderManage}">
         <tr>
-            <td>${order.consumer}</td>
+            <td>${order.oid}</td>
             <td>${UserService.queryGoodById(order.uid,order.gid).gname}</td>
             <td>
                 <img src="${pageContext.request.contextPath}/statics/img/${UserService.queryGoodById(order.uid,order.gid).image}" height="100" alt="${UserService.queryGoodById(order.uid,order.gid).gname}的封面图"/>
             </td>
             <td>${order.amount}</td>
             <td>${order.price}</td>
+            <td>${order.consumer}</td>
             <td>${order.address}</td>
-            <td>${order.oid}</td>
             <td>${order.situation}</td>
             <td>
                 <button onclick="deliver('${order.oid}')">发货</button>
             </td>
         </tr>
     </c:forEach>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/jquery-3.6.4.js"></script>
     <script>
         function deliver(oid) {
             window.location.href = "/deliver?oid=" + oid;
@@ -123,6 +121,7 @@
         }
     </script>
     </tbody>
+
 </table>
 </body>
 </html>

@@ -95,6 +95,7 @@
             <th>数量</th>
             <th>总价</th>
             <th>订单编号</th>
+            <th>收获地址</th>
             <th>发货状态</th>
         </tr>
         </thead>
@@ -109,13 +110,14 @@
                 <td>${order.amount}</td>
                 <td>${order.price}</td>
                 <td>${order.oid}</td>
+                <td>${order.address}</td>
                 <td>${order.situation}</td>
             </tr>
         </c:forEach>
 <%--        </c:forEach>--%>
-        <tr>
-            <td colspan="4">收货地址:${Address}</td>
-        </tr>
+<%--        <tr>--%>
+<%--            <td colspan="4">收货地址:${Address}</td>--%>
+<%--        </tr>--%>
         </tbody>
     </table>
 </body>

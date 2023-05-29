@@ -125,15 +125,18 @@
             </tr>
         </c:forEach>
         <tr>
-            <td colspan="5" class="total">总价：${TOTAL}  <button class="topay" onclick="pay()" type="submit">立即支付</button></td>
+            <td colspan="5" class="total">总价：${TOTAL}  <button class="topay" onclick="pay(event)" type="submit">立即支付</button></td>
         </tr>
         </tbody>
     </table>
 </form>
+<script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/jquery-3.6.4.js"></script>
 <script>
-    function pay() {
+    function pay(event) {
+
         var address = document.getElementsByName("address")[0].value;
-        if (address == "") {
+        if (address === "") {
+            event.preventDefault();
             alert("请填写收货地址！");
             return false;
         }

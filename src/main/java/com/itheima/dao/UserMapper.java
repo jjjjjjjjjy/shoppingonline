@@ -58,4 +58,8 @@ public interface UserMapper {
     void updateOrderStatus(int oid);
 
     List<Order> queryOrderByUidAndSituation(@Param("uid") int uid,@Param("situation") String situation);
+
+    List<Goods> queryGoodByCategory(@Param("category") String category);
+
+    List<Order> queryOrderByConsumerAndSituation(@Param("consumer") int consumer, @Param("situation") String situation);
 }

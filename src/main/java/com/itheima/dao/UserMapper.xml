@@ -81,4 +81,10 @@
     <select id="queryOrderByUidAndSituation" resultType="Order">
         select * from `order` where uid=#{uid} and situation=#{situation};
     </select>
+    <select id="queryGoodByCategory" resultType="Goods">
+        select * from goods where category=#{category};
+    </select>
+    <select id="queryOrderByConsumerAndSituation" resultType="Order">
+        select * from `order` where consumer=#{consumer} and situation=#{situation};
+    </select>
 </mapper>

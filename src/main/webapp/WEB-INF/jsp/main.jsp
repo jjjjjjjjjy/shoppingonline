@@ -18,74 +18,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/statics/css/main.css">
     <link rel="icon" href="${pageContext.request.contextPath}/statics/img/favicon.ico" mce_href="${pageContext.request.contextPath}/statics/img/favicon.ico" type="image/x-icon"/>
-    <style>
-        #shop{
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #f8f9fa;
-        }
-        #shop img{
-            margin-right: 10px;
-        }
-        #search{
-            width: 300px;
-            height: 30px;
-            border-radius: 5px;
-            border: none;
-            padding: 5px;
-            margin-right: 10px;
-        }
-        #search:focus{
-            outline: none;
-        }
-        #search-btn{
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        #search-btn:hover{
-            background-color: #0069d9;
-        }
-        #cart{
-            display: flex;
-            align-items: center;
-        }
-        #cart img{
-            margin-left: 10px;
-        }
-        #user{
-            display: flex;
-            align-items: center;
-        }
-        #user li{
-            margin-right: 20px;
-        }
-        .a1{
-            text-decoration: none;
-            color: #3e8e41;
-            font-weight: bold;
-        }
-        .addcart{
-            font-size: 14px;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ff6600;
-            color: #333;
-            cursor: pointer;
-        }
-        a {
-            text-decoration: none;
-            color: white;
-        }
-    </style>
 </head>
 <body>
 <div id="shop">
@@ -111,10 +45,21 @@
         <li><a href="${pageContext.request.contextPath}/goMyOrder" class="a1">我的订单</a></li>
     </ul>
 </div>
+        <div class="nav-container">
+            <ul class="nav">
+                <li><a href="${pageContext.request.contextPath}/queryGoods">首页 <span>(current)</span></a></li>
+                <li><a href="${pageContext.request.contextPath}/queryGoods">全部商品</a></li>
+                <li><a href="${pageContext.request.contextPath}/queryGoods?category=服装鞋帽">服装鞋帽</a></li>
+                <li><a href="${pageContext.request.contextPath}/queryGoods?category=数码家电">数码家电</a></li>
+                <li><a href="${pageContext.request.contextPath}/queryGoods?category=美妆个护">美妆个护</a></li>
+                <li><a href="${pageContext.request.contextPath}/queryGoods?category=食品饮料">食品饮料</a></li>
+                <li><a href="${pageContext.request.contextPath}/queryGoods?category=家居生活">家居生活</a></li>
+            </ul>
+        </div>
     <c:forEach items="${List}" var="product">
         <div class="col-md-3">
             <div class="thumbnail">
-                <img src="${pageContext.request.contextPath}/statics/img/${product.image}" alt="${product.gname}" height="50">
+                <img src="${pageContext.request.contextPath}/statics/img/${product.image}" alt="${product.gname}" height="50" data-id="${product.gid}" onclick="gotoController(this)">
                 <div class="caption">
                     <h4>${product.gname}</h4>
                 </div>
@@ -122,4 +67,10 @@
         </div>
     </c:forEach>
 </body>
+<script>
+    function gotoController(img) {
+        var gid = img.getAttribute('data-id'); // 获取商品编号
+        location.href = '/goodDescription?gid=' + gid; // 跳转到controller，并传递商品编号
+    }
+</script>
 </html>

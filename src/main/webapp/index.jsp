@@ -41,17 +41,34 @@
         <input type="submit" value="搜索">
         <a href="#">我的购物车</a><img src="${pageContext.request.contextPath}/statics/img/cart.png" height="60px" width="60px">
     </div>
+    <div class="nav-container">
+        <ul class="nav">
+            <li><a href="${pageContext.request.contextPath}/queryGoods">首页 <span>(current)</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/queryGoods">全部商品</a></li>
+            <li><a href="${pageContext.request.contextPath}/queryGoods?category=服装鞋帽">服装鞋帽</a></li>
+            <li><a href="${pageContext.request.contextPath}/queryGoods?category=数码家电">数码家电</a></li>
+            <li><a href="${pageContext.request.contextPath}/queryGoods?category=美妆个护">美妆个护</a></li>
+            <li><a href="${pageContext.request.contextPath}/queryGoods?category=食品饮料">食品饮料</a></li>
+            <li><a href="${pageContext.request.contextPath}/queryGoods?category=家居生活">家居生活</a></li>
+        </ul>
+    </div>
     <c:forEach items="${List}" var="product">
-        <div class="col-md-3">
-            <div class="thumbnail">
-                <img src="${product.image}" alt="${product.gname}">
-                <div class="caption">
-                    <h4>${product.gname}</h4>
-                    <p><a href="#" class="btn btn-primary" role="button">查看详情</a></p>
-                </div>
+    <div class="col-md-3">
+        <div class="thumbnail">
+            <img src="${pageContext.request.contextPath}/statics/img/${product.image}" alt="${product.gname}" height="50" data-id="${product.gid}" onclick="gotoController(this)">
+            <div class="caption">
+                <h4>${product.gname}</h4>
             </div>
         </div>
+    </div>
     </c:forEach>
+</body>
+<script>
+    function gotoController(img) {
+        var gid = img.getAttribute('data-id'); // 获取商品编号
+        location.href = '/goodDescription?gid=' + gid; // 跳转到controller，并传递商品编号
+    }
+</script>
 </div>
 </form>
 </body>

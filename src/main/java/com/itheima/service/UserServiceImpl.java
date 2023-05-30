@@ -132,4 +132,14 @@ public class UserServiceImpl implements UserService{
     public List<Order> queryOrderByUidAndSituation(int uid, String situation) {
         return userMapper.queryOrderByUidAndSituation(uid,situation);
     }
+
+    @Override
+    public List<Goods> queryGoodByCategory(String category) {
+        return userMapper.queryGoodByCategory(category);
+    }
+
+    @Override
+    public List<Order> queryOrderByConsumerAndSituation(int consumer, String situation) {
+        return userMapper.queryOrderByConsumerAndSituation(consumer,situation);
+    }
 }

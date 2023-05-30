@@ -18,9 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 @Controller
 public class UserController {
     //controller调用service层
@@ -33,7 +31,6 @@ public class UserController {
     public String list(Model model,HttpSession session){
         int uid = (int) session.getAttribute("UID");
         List<Goods> list = userService.queryAllGoods(uid);
-        System.out.println(list);
         model.addAttribute("list",list);
         return "merchant";
     }
@@ -50,7 +47,6 @@ public class UserController {
         goods.setGname(gname);
         goods.setPrice(price);
         goods.setCategory(category);
-        Map<String,Object> result=new HashMap<>();
             if (!file.isEmpty()) {
                 //原始文件名称
                 String fileName = file.getOriginalFilename();
@@ -65,19 +61,15 @@ public class UserController {
             }else{
                 goods.setImage("logo.png");
             }
-            System.out.println("addGood--->"+goods);
             userService.addGood(goods);
-            result.put("success",true);
-            result.put("message","新增商品成功");
-            System.out.println(result);
             return "redirect:/allGoods";//重定向
         }
+        //更新商品
     @RequestMapping("/toUpdate")
     public String toUpdatePaper(@RequestParam("gid")int gid,Model model,HttpSession session){
         int uid= (int) session.getAttribute("UID");
         Goods good = userService.queryGoodById(uid,gid);
         model.addAttribute("QGood",good);
-        System.out.println("update--->"+good);
         return "updateGood";
     }
     @RequestMapping("/updateGood")
@@ -86,7 +78,6 @@ public class UserController {
         if(file!=null){
             String fileName= file.getOriginalFilename();
             if(null!=fileName && fileName.equalsIgnoreCase("")){
-                System.out.println("updateupdate-->"+good);
                 userService.updateGoodBasicInfo(good);
                 return "redirect:/allGoods";
             }
@@ -104,23 +95,35 @@ public class UserController {
         return "redirect:/allGoods";
     }
 
-    //删除
+    //删除商品
     @RequestMapping("/deleteGood")
     public String deleteCourse(@RequestParam("gid")int gid,@RequestParam("uid")int uid){
         userService.deleteGoodById(uid,gid);
         return "redirect:/allGoods";
     }
-    //查询
+    //查询所有商品，判断是否有类别传入，若有则按类别查询
     @RequestMapping("/queryGoods")
-    public String queryCourse( Model model){
+    public String queryGoods( Model model,HttpServletRequest request){
+        String category=request.getParameter("category");
+        System.out.println(category);
         List<Goods> list=new ArrayList<Goods>();
-        list= userService.queryGoods();
+        List<Goods> list1=new ArrayList<Goods>();
+        list1=userService.queryGoodByCategory(category);
+        System.out.println(list1);
+        if (category == null){
+            list= userService.queryGoods();
+        }else {
+            if (list1!=null){
+                list=list1;
+            }
+        }
         if(list==null){
             model.addAttribute("error","未查到");
         }
         model.addAttribute("List",list);
         return "main";
     }
+    //通过商品名模糊查询
     @RequestMapping("/queryGoodsByName")
     public String queryCourseByName(String search,Model model){
         List<Goods> list=new ArrayList<Goods>();
@@ -137,19 +140,18 @@ public class UserController {
         int uid= userService.queryUidByGid(gid);
         int c= (int) session.getAttribute("UID");
         session.setAttribute("GID",gid);
-        System.out.println(gid);
-        System.out.println(uid);
-        System.out.println(c);
         userService.updateConsumer(c,gid);
         userService.addCart(uid,gid,c);
         return "redirect:/queryGoods";
     }
+    //注销
     @RequestMapping("/goOut")
     public String goOut(HttpSession session){
         int uid= (int) session.getAttribute("UID");
         userService.updateGoodByGid(uid);
         return "redirect:/user/goLogin";
     }
+    //用户的我的购物车
     @RequestMapping("/MyCart")
     public String myCart(HttpSession session){
         List<Goods> list=new ArrayList<Goods>();
@@ -158,6 +160,7 @@ public class UserController {
         session.setAttribute("list1",list);
         return "cart";
     }
+    //用户从我的购物车中移除商品
     @RequestMapping(value="/removeCart/{gid}",method= RequestMethod.POST)
     @ResponseBody
     public String removeCart(@PathVariable("gid")int gid)
@@ -172,6 +175,7 @@ public class UserController {
             return "fail";
         }
     }
+    //用户转到订单页面去支付
     @RequestMapping("/goPay")
     public String goPay(HttpServletRequest request,HttpSession session){
         List<Goods> list=new ArrayList<Goods>();
@@ -190,13 +194,13 @@ public class UserController {
             count= Integer.parseInt(rows[i][1]);
             allprice+=Double.parseDouble(rows[i][2]);
             gid= Integer.parseInt(rows[i][3]);
-            System.out.println("uid:"+uid+",count:"+count+",gid:"+gid);
             list.add(userService.queryGoodById(uid,gid));
             session.setAttribute("list2",list);
         }
         session.setAttribute("TOTAL",allprice);
         return "order";
     }
+    //添加订单信息
     @RequestMapping("/addOrder")
     public String addOrder(HttpSession session, @RequestParam("address") String address){
         List<Goods> list= (List<Goods>) session.getAttribute("list2");
@@ -220,17 +224,24 @@ public class UserController {
         session.setAttribute("Order",list1);
         return "redirect:/goMyOrder";//重定向到我的订单
     }
+    //查看我的订单
     @RequestMapping("/goMyOrder")
-    public ModelAndView order(HttpSession session){
+    public ModelAndView order(HttpSession session,HttpServletRequest request){
+        String situation=request.getParameter("situation");
         List<Order> list= new ArrayList<>();
         ModelAndView mv = new ModelAndView("MyOrder");
         int uid= (int) session.getAttribute("UID");
-        list=userService.queryOrderByConsumer(uid);
+        if (situation!=null){
+            list=userService.queryOrderByConsumerAndSituation(uid,situation);
+        }else {
+            list=userService.queryOrderByConsumer(uid);
+        }
+
         mv.addObject("MyOrder",list);
         mv.addObject("UserService",userService);
         return mv ;
     }
-
+    //商家的订单管理
     @RequestMapping("/OrderManage")
     public ModelAndView orderManage(HttpSession session){
         List<Order> list= new ArrayList<>();
@@ -241,12 +252,14 @@ public class UserController {
         mv.addObject("UserService", userService);
         return mv;
     }
+    //商家发货操作
     @RequestMapping("/deliver")
     public String deliverOrder(@RequestParam("oid") int oid) {
         // 根据订单号更新数据库中的订单状态为已发货
         userService.updateOrderStatus(oid);
         return "redirect:/orderManage"; // 重定向到订单管理页面
     }
+    //商家查看未发货订单
     @RequestMapping("/unshipped")
     public ModelAndView unshipped(HttpSession session) {
         List<Order> list= new ArrayList<>();
@@ -256,6 +269,14 @@ public class UserController {
         mv.addObject("OrderManage", list);
         mv.addObject("UserService", userService);
         return mv;
+    }
+
+    @RequestMapping("/goodDescription")
+    public String goodDescription(@Param("gid")int gid,HttpSession session){
+        int uid=userService.queryUidByGid(gid);
+        Goods goods=userService.queryGoodById(uid,gid);
+        session.setAttribute("GoodDescription",goods);
+        return "goodDescription";
     }
 //    @RequestMapping("/isCourseExist")
 //    public void isCourseExit(String name, HttpServletResponse response) throws IOException {

@@ -84,7 +84,9 @@
     <h1>我的订单</h1>
     <button ><a href="${pageContext.request.contextPath}/queryGoods">返回</a> </button>
     <div class="cart">
-        <span>已购买</span>
+        <span>所有订单</span>
+        <button ><a href="${pageContext.request.contextPath}/goMyOrder?situation=未发货">未发货</a> </button>
+        <button ><a href="${pageContext.request.contextPath}/goMyOrder?situation=已发货">历史订单</a> </button>
     </div>
     <table>
         <thead>

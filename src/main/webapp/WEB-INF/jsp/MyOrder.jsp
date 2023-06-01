@@ -5,88 +5,93 @@
 <head>
     <title>我的订单页面</title>
     <link rel="icon" href="${pageContext.request.contextPath}/statics/img/favicon.ico" mce_href="${pageContext.request.contextPath}/statics/img/favicon.ico" type="image/x-icon"/>
-    <style type="text/css">
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+    <style>
         .container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
+
         h1 {
-            font-size: 36px;
-            margin: 0;
-            padding: 20px 0;
             text-align: center;
-        }
-        .cart {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            color: #ff5500;
             margin-bottom: 20px;
         }
+
         .cart span {
             font-size: 24px;
-            font-weight: bold;
+            color: #ff5500;
         }
-        .cart button {
-            font-size: 18px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ff6600;
-            color: #fff;
-            cursor: pointer;
-        }
+
         table {
-            border-collapse: collapse;
             width: 100%;
+            border-collapse: collapse;
         }
-        th, td {
-            text-align: center;
+
+        th,
+        td {
             padding: 10px;
+            text-align: center;
             border: 1px solid #ddd;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #ff8533;
+            color: #fff;
         }
-        .total {
-            font-weight: bold;
-            text-align: right;
-            padding-right: 10px;
+
+        img {
+            height: 100px;
+            width: 100px;
+        }
+
+        input[type="number"] {
+            width: 50px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            background-color: #f5f5f5;
         }
 
         input[type="checkbox"] {
             margin-right: 10px;
         }
         button {
-            font-size: 14px;
-            padding: 5px 10px;
+            background-color: #ff3500;
+            color: #fff;
             border: none;
             border-radius: 5px;
-            background-color: #ddd;
-            color: #333;
+            padding: 5px 10px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
+
         button:hover {
-            background-color: #ccc;
+            background-color: #ff6347;
         }
+
         a {
             text-decoration: none;
-            color: #333;
+            color: #fff;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
-<body>
+<body class="container">
     <h1>我的订单</h1>
-    <button ><a href="${pageContext.request.contextPath}/queryGoods">返回</a> </button>
-    <div class="cart">
-        <span>所有订单</span>
-        <button ><a href="${pageContext.request.contextPath}/goMyOrder?situation=未发货">未发货</a> </button>
-        <button ><a href="${pageContext.request.contextPath}/goMyOrder?situation=已发货">历史订单</a> </button>
+
+    <div style="margin-bottom: 20px;">
+        <button ><a href="${pageContext.request.contextPath}/queryGoods">返回</a> </button>
+        <button ><a href="${pageContext.request.contextPath}/goMyOrder">全部订单</a> </button>
+        <button ><a href="${pageContext.request.contextPath}/goMyOrder?situation=未发货">未发货订单</a> </button>
+        <button ><a href="${pageContext.request.contextPath}/goMyOrder?situation=已发货">已发货订单</a> </button>
+        <button ><a href="${pageContext.request.contextPath}/goMyOrder?situation=已收货">历史订单</a> </button>
     </div>
     <table>
         <thead>
@@ -98,7 +103,7 @@
             <th>总价</th>
             <th>订单编号</th>
             <th>收获地址</th>
-            <th>发货状态</th>
+            <th>状态</th>
         </tr>
         </thead>
         <tbody>
@@ -113,13 +118,27 @@
                 <td>${order.price}</td>
                 <td>${order.oid}</td>
                 <td>${order.address}</td>
-                <td>${order.situation}</td>
+                <td>
+                    <c:if test="${order.situation=='未发货'}">
+                        待发货
+                    </c:if>
+                    <c:if test="${order.situation=='已发货'}">
+                        <button onclick="delivery('${order.oid}')">确认收货</button>
+                    </c:if>
+                    <c:if test="${order.situation=='已收货'}">
+                        订单已完成
+                    </c:if>
+                </td>
             </tr>
         </c:forEach>
-<%--        </c:forEach>--%>
-<%--        <tr>--%>
-<%--            <td colspan="4">收货地址:${Address}</td>--%>
-<%--        </tr>--%>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/jquery-3.6.4.js"></script>
+        <script>
+            function delivery(oid) {
+                window.location.href = "${pageContext.request.contextPath}/delivery?oid=" + oid;
+                alert("收货成功");
+                location.reload();
+            }
+        </script>
         </tbody>
     </table>
 </body>

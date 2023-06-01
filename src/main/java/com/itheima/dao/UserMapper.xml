@@ -76,7 +76,7 @@
         select * from `order` where uid=#{uid};
     </select>
     <update id="updateOrderStatus" parameterType="Order">
-        update `order` set situation='已发货' where oid=#{oid};
+        update `order` set situation=#{situation} where oid=#{oid};
     </update>
     <select id="queryOrderByUidAndSituation" resultType="Order">
         select * from `order` where uid=#{uid} and situation=#{situation};
@@ -87,4 +87,7 @@
     <select id="queryOrderByConsumerAndSituation" resultType="Order">
         select * from `order` where consumer=#{consumer} and situation=#{situation};
     </select>
+    <update id="updateCartAmount" parameterType="Goods">
+        update goods set cart = #{cart} where gid = #{gid}
+    </update>
 </mapper>

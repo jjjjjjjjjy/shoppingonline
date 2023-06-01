@@ -55,11 +55,13 @@ public interface UserMapper {
 
     List<Order> queryOrderByUid(int uid);
 
-    void updateOrderStatus(int oid);
+    void updateOrderStatus(@Param("oid") int oid,@Param("situation") String situation);
 
     List<Order> queryOrderByUidAndSituation(@Param("uid") int uid,@Param("situation") String situation);
 
     List<Goods> queryGoodByCategory(@Param("category") String category);
 
     List<Order> queryOrderByConsumerAndSituation(@Param("consumer") int consumer, @Param("situation") String situation);
+
+    int updateCartAmount(@Param("gid") Integer gid,@Param("cart") Integer cart);
 }

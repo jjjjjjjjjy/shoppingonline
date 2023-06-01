@@ -10,96 +10,79 @@
     <meta name="description"
           content="YTWO-SHOP-专业的综合网上购物商城，为您提供正品低价的购物选择、优质便捷的服务体验。商品来自全球数十万品牌商家，囊括家电、手机、电脑、服装、居家、母婴、美妆、个护、食品、生鲜等丰富品类，满足各种购物需求。"/>
     <meta name="Keywords" content="网上购物,网上商城,家电,手机,电脑,服装,居家,母婴,美妆,个护,食品,生鲜"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/statics/css/index.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- jQuery -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/statics/css/main.css">
     <link rel="icon" href="${pageContext.request.contextPath}/statics/img/favicon.ico" mce_href="${pageContext.request.contextPath}/statics/img/favicon.ico" type="image/x-icon"/>
-    <style>
-        #shop{
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .l1{
-            float: right;
-        }
-    </style>
 </head>
 <body>
-<div>
-    <ul>
-        <li class="l1">
-            <a href="${pageContext.request.contextPath}/user/goLogin" class="link-login">你好，请登录</a>&nbsp;&nbsp;
-        </li>
-    </ul>
-</div>
-<form action="${pageContext.request.contextPath}/queryGoods">
-<div id="shop" >
-    <div>
-        <img src="${pageContext.request.contextPath}/statics/img/logo.png" width="60px" height="60px">YTWO-SHOP
+<header id="head">
+    <div class="logo">
+        <a href="#">Y-TWO SHOP 欢迎您</a>
     </div>
-    <div>
-        <input type="text" id="search">
-        <input type="submit" value="搜索">
-        <a href="#">我的购物车</a><img src="${pageContext.request.contextPath}/statics/img/cart.png" height="60px" width="60px">
-    </div>
-    <div class="nav-container">
-        <ul class="nav">
-            <li><a href="${pageContext.request.contextPath}/queryGoods">首页 <span>(current)</span></a></li>
-            <li><a href="${pageContext.request.contextPath}/queryGoods">全部商品</a></li>
-            <li><a href="${pageContext.request.contextPath}/queryGoods?category=服装鞋帽">服装鞋帽</a></li>
-            <li><a href="${pageContext.request.contextPath}/queryGoods?category=数码家电">数码家电</a></li>
-            <li><a href="${pageContext.request.contextPath}/queryGoods?category=美妆个护">美妆个护</a></li>
-            <li><a href="${pageContext.request.contextPath}/queryGoods?category=食品饮料">食品饮料</a></li>
-            <li><a href="${pageContext.request.contextPath}/queryGoods?category=家居生活">家居生活</a></li>
+    <nav>
+        <ul>
+            <li><a href="${pageContext.request.contextPath}/queryGoods">首页</a></li>
+            <li><a href="${pageContext.request.contextPath}/queryGoods">商品分类</a></li>
+            <li><a href="${pageContext.request.contextPath}/MyCart">购物车</a></li>
+            <li><a href="${pageContext.request.contextPath}/goMyOrder">我的订单</a></li>
+            <c:if test="${USER_SESSION != null}">
+                <li><a href="${pageContext.request.contextPath}/user/goOut">退出登录</a></li>
+            </c:if>
+            <c:if test="${sessionScope.user == null}">
+                <li><a href="${pageContext.request.contextPath}/user/goLogin">登录</a></li>
+            </c:if>
         </ul>
-    </div>
-    <c:forEach items="${List}" var="product">
-    <div class="col-md-3">
-        <div class="thumbnail">
-            <img src="${pageContext.request.contextPath}/statics/img/${product.image}" alt="${product.gname}" height="50" data-id="${product.gid}" onclick="gotoController(this)">
-            <div class="caption">
-                <h4>${product.gname}</h4>
+    </nav>
+</header>
+<main>
+
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 500px">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>>
+            <li data-target="#myCarousel" data-slide-to="1"></li>>
+            <li data-target="#myCarousel" data-slide-to="2"></li>>
+            <li data-target="#myCarousel" data-slide-to="3"></li>>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" id="container" style="height: 500px">
+            <div class="item active">
+                <img src="${pageContext.request.contextPath}/statics/img/header1.jpg?text=Slide+1" alt="Slide 1">
+            </div>
+
+            <div class="item">
+                <img src="${pageContext.request.contextPath}/statics/img/header2.jpg?text=Slide+2" alt="Slide 2">
+            </div>
+
+            <div class="item">
+                <img src="${pageContext.request.contextPath}/statics/img/header3.jpg?text=Slide+3" alt="Slide 3">
+            </div>
+            <div class="item">
+                <img src="${pageContext.request.contextPath}/statics/img/header4.jpg?text=Slide+4" alt="Slide 4">
             </div>
         </div>
+
+        <!-- Left and right controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
-    </c:forEach>
+</main>
+<footer>
+    <p>版权所有 © Y-TWO SHOP</p>
+</footer>
 </body>
-<script>
-    function gotoController(img) {
-        var gid = img.getAttribute('data-id'); // 获取商品编号
-        location.href = '/goodDescription?gid=' + gid; // 跳转到controller，并传递商品编号
-    }
-</script>
-</div>
-</form>
-</body>
-<%--</html>--%>
-<%--<!--分类标签-->--%>
-<%--<div id="category">--%>
-<%--    <a href="#" class="category-item" data-category="1">家电</a>--%>
-<%--    <a href="#" class="category-item" data-category="2">服装</a>--%>
-<%--    <a href="#" class="category-item" data-category="3">美妆</a>--%>
-<%--    <!--其他分类标签-->--%>
-<%--</div>--%>
-
-<%--<!--商品展示区域-->--%>
-<%--<div id="product-list">--%>
-<%--    <!--商品列表-->--%>
-<%--</div>--%>
-
-<%--<script>--%>
-<%--    $(function() {--%>
-<%--        //点击分类标签获取对应分类的商品信息--%>
-<%--        $('#category').on('click', '.category-item', function() {--%>
-<%--            var category = $(this).data('category');--%>
-<%--            $.ajax({--%>
-<%--                url: '/product/list',--%>
-<%--                type: 'get',--%>
-<%--                data: {category: category},--%>
-<%--                success: function(data) {--%>
-<%--                    //将获取到的商品信息展示在页面上--%>
-<%--                    //...--%>
-<%--                }--%>
-<%--            });--%>
-<%--        });--%>
-<%--    });--%>
-<%--</script>--%>
+</html>

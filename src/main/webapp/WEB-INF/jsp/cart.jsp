@@ -5,81 +5,98 @@
 <head>
     <title>我的购物车</title>
     <link rel="icon" href="${pageContext.request.contextPath}/statics/img/favicon.ico" mce_href="${pageContext.request.contextPath}/statics/img/favicon.ico" type="image/x-icon"/>
-    <style type="text/css">
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+    <style>
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
+
         h1 {
-            font-size: 36px;
-            margin: 0;
-            padding: 20px 0;
             text-align: center;
+            color: #ff5500;
+            margin-bottom: 20px;
         }
+
         .cart {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .cart span {
             font-size: 24px;
-            font-weight: bold;
+            color: #ff5500;
         }
-        .cart button {
-            font-size: 18px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ff6600;
-            color: #fff;
-            cursor: pointer;
-        }
+
         table {
-            border-collapse: collapse;
             width: 100%;
+            border-collapse: collapse;
         }
-        th, td {
-            text-align: center;
+
+        th,
+        td {
             padding: 10px;
+            text-align: center;
             border: 1px solid #ddd;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #ff8533;
+            color: #fff;
         }
-        .total {
-            font-weight: bold;
-            text-align: right;
-            padding-right: 10px;
+
+        img {
+            height: 100px;
+            width: 100px;
         }
-        .selected {
-            color: green;
-            font-weight: bold;
+
+        input[type="number"] {
+            width: 50px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            background-color: #f5f5f5;
         }
+
         input[type="checkbox"] {
             margin-right: 10px;
         }
+
+        .total {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        #selectAll {
+            margin-left: 10px;
+        }
+
         button {
-            font-size: 14px;
-            padding: 5px 10px;
+            background-color: #ff5500;
+            color: #fff;
             border: none;
             border-radius: 5px;
-            background-color: #ddd;
-            color: #333;
+            padding: 5px 10px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
+
         button:hover {
-            background-color: #ccc;
+            background-color: #ff6347;
         }
+
         a {
             text-decoration: none;
-            color: #333;
+            color: #fff;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -107,13 +124,15 @@
         </tr>
         </thead>
         <tbody>
-<c:forEach var="goods" items="${list1}">
+        <c:forEach var="goods" items="${list1}">
     <tr>
         <td>${goods.uid}</td>
         <td>
             <img src="${pageContext.request.contextPath}/statics/img/${goods.image}" height="100" alt="${goods.gname}的封面图"/>
         </td>
-        <td>${goods.cart}</td>
+        <td>
+            <input type="number" name="cart" value="${goods.cart}" min="1" max="100" step="1" onchange="updateCartAmount(${goods.gid}, this.value)">
+        </td>
         <td>${goods.price}</td>
         <td>${goods.cart * goods.price}</td>
         <td>
@@ -131,8 +150,20 @@
     </tr>
     </tbody>
 </table>
+</div>
     <script type="text/javascript" src="${pageContext.request.contextPath}/statics/js/jquery-3.6.4.js"></script>
 <script type="text/javascript">
+    function updateCartAmount(gid, cart) {
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/updateCartAmount",
+            data: {
+                "gid": gid,
+                "cart": cart
+            }
+        });
+        location.reload();
+    }
     var selectAll = document.getElementById("selectAll");
     var checkboxes = document.getElementsByName("select");
     var total = document.querySelector(".total");
@@ -198,6 +229,5 @@
         });
     }
 </script>
-</div>
 </body>
 </html>

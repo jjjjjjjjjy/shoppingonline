@@ -90,8 +90,7 @@
         <th>总价</th>
         <th>用户ID</th>
         <th>收获地址</th>
-        <th>发货状态</th>
-        <th>操作</th>
+        <th>状态</th>
     </tr>
     </thead>
     <tbody>
@@ -106,9 +105,16 @@
             <td>${order.price}</td>
             <td>${order.consumer}</td>
             <td>${order.address}</td>
-            <td>${order.situation}</td>
             <td>
-                <button onclick="deliver('${order.oid}')">发货</button>
+                <c:if test="${order.situation=='未发货'}">
+                    <button onclick="deliver('${order.oid}')">发货</button>
+                </c:if>
+                <c:if test="${order.situation=='已发货'}">
+                    未收货
+                </c:if>
+                <c:if test="${order.situation=='已收货'}">
+                    订单已完成
+                </c:if>
             </td>
         </tr>
     </c:forEach>
@@ -121,7 +127,6 @@
         }
     </script>
     </tbody>
-
 </table>
 </body>
 </html>

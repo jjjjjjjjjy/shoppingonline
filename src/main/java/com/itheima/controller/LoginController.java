@@ -1,6 +1,5 @@
 package com.itheima.controller;
 
-import com.itheima.pojo.Goods;
 import com.itheima.pojo.User;
 import com.itheima.service.UserService;
 import com.itheima.service.UserServiceImpl;
@@ -9,10 +8,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -29,12 +32,24 @@ public class LoginController {
         return "login";
     }
     @RequestMapping("/login")
-    public String login(HttpSession session, User user, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
+    public Object login(@RequestParam("captcha") String captcha, HttpSession session, User user, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
         String uname=user.getUname();
         String password=user.getPassword();
 
         String rights= request.getParameter("rights");
-
+        ModelAndView mav = new ModelAndView();
+        Map<String, Object> result = new HashMap<>();
+        String code = (String) session.getAttribute("data-code");
+        if (!captcha.equals(code)) {
+            System.out.println("code====>" + code);
+            System.out.println("captcha====>" + captcha);
+            result.put("success", false);
+            result.put("message", "验证码错误");
+            System.out.println(result);
+            mav.setViewName("login");
+            mav.addObject("msg", result);
+            return mav;
+        }
         //把用户信息存在session中
         if (uname==null||password==null){
             model.addAttribute("msg","用户名或密码不能为空！");
@@ -49,7 +64,6 @@ public class LoginController {
             int uid = userService.queryUid(uname);
             user1.setUid(uid);
             session.setAttribute("UID",uid);
-            System.out.println("login==>"+user1);
             session.setAttribute("USER_SESSION",user1);
             if(rights.equals("1"))
             {

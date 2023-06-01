@@ -51,11 +51,13 @@ public interface UserService {
 
     List<Order> queryOrderByUid(int uid);
 
-    void updateOrderStatus(int oid);
+    void updateOrderStatus(int oid,String situation);
 
     List<Order> queryOrderByUidAndSituation(int uid, String situation);
 
     List<Goods> queryGoodByCategory(String category);
 
     List<Order> queryOrderByConsumerAndSituation(int uid, String situation);
+
+    boolean updateCartAmount(Integer gid, Integer cart);
 }

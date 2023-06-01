@@ -63,12 +63,51 @@
     <select id="rights" name="rights">
         <option value="2">用户</option>
         <option value="1">商家</option>
-    </select>
+    </select><br>
+    <label>验证码：</label>
+    <input type="text" name="captcha" id="captcha">
+    <img src="${pageContext.request.contextPath}/captcha" id="captcha-img" onclick="refreshCaptcha()">
     <input type="submit" value="登陆">
     <span style="color: red">${msg}</span>
     <div class="register">
         还没有账号？<a href="${pageContext.request.contextPath}/toregister">注册</a>
     </div>
 </form>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script type="text/javascript">
+    // 刷新验证码
+    function refreshCaptcha() {
+        $('#captcha-img').attr('src', '/captcha?' + Math.random());
+    }
+
+    // 表单提交时，验证表单数据
+    $('#register-form').submit(function () {
+        var uname = $('#uname').val();
+        var password = $('#password').val();
+        var rights = $('#rights').val();
+        var captcha = $('#captcha').val();
+
+        if (uname===undefined||uname==='') {
+            alert('请输入用户名');
+            return false;
+        }
+
+        if (password===undefined||password==='') {
+            alert('请输入密码');
+            return false;
+        }
+        if (captcha===undefined||captcha==='') {
+            alert('请输入验证码');
+            return false;
+        }
+    });
+
+    // 页面加载时，获取验证码
+    $(function() {
+        refreshCaptcha();
+    });
+</script>
 </body>
 </html>

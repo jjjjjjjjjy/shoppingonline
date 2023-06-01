@@ -124,8 +124,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updateOrderStatus(int oid) {
-        userMapper.updateOrderStatus(oid);
+    public void updateOrderStatus(int oid,String situation) {
+        userMapper.updateOrderStatus(oid,situation);
     }
 
     @Override
@@ -141,5 +141,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<Order> queryOrderByConsumerAndSituation(int consumer, String situation) {
         return userMapper.queryOrderByConsumerAndSituation(consumer,situation);
+    }
+
+    @Override
+    public boolean updateCartAmount(Integer gid, Integer cart) {
+        int result = userMapper.updateCartAmount(gid, cart);
+        return result > 0;
     }
 }

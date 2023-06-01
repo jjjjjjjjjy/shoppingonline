@@ -5,90 +5,81 @@
 <head>
     <title>结算页面</title>
     <link rel="icon" href="${pageContext.request.contextPath}/statics/img/favicon.ico" mce_href="${pageContext.request.contextPath}/statics/img/favicon.ico" type="image/x-icon"/>
-    <style type="text/css">
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+    <style>
         .container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
+
         h1 {
-            font-size: 36px;
-            margin: 0;
-            padding: 20px 0;
             text-align: center;
-        }
-        .cart {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            color: #ff5500;
             margin-bottom: 20px;
         }
+
         .cart span {
             font-size: 24px;
-            font-weight: bold;
+            color: #ff5500;
         }
-        .cart button {
-            font-size: 18px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ff6600;
-            color: #fff;
-            cursor: pointer;
-        }
+
         table {
-            border-collapse: collapse;
             width: 100%;
+            border-collapse: collapse;
         }
-        th, td {
-            text-align: center;
+
+        th,
+        td {
             padding: 10px;
+            text-align: center;
             border: 1px solid #ddd;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #ff8533;
+            color: #fff;
         }
-        .total {
-            font-weight: bold;
-            text-align: right;
-            padding-right: 10px;
+
+        img {
+            height: 100px;
+            width: 100px;
         }
-        .selected {
-            color: green;
-            font-weight: bold;
+
+        input[type="number"] {
+            width: 50px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            background-color: #f5f5f5;
         }
+
         input[type="checkbox"] {
             margin-right: 10px;
         }
         button {
-            font-size: 14px;
-            padding: 5px 10px;
+            background-color: #ff3500;
+            color: #fff;
             border: none;
             border-radius: 5px;
-            background-color: #ddd;
-            color: #333;
+            padding: 5px 10px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
+
         button:hover {
-            background-color: #ccc;
+            background-color: #ff6347;
         }
+
         a {
             text-decoration: none;
-            color: #333;
-        }
-        .topay {
-            font-size: 18px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ff6600;
             color: #fff;
-            cursor: pointer;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -100,7 +91,7 @@
         <span>商品清单</span>
     </div>
     <div>收货地址:
-        <input type="text" name="address" placeholder="请输入您的收获地址">
+        <input type="text" name="address" placeholder="请输入您的收获地址" value="${Address}">
     </div>
     <table>
         <thead>

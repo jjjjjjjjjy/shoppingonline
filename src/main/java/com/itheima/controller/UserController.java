@@ -103,7 +103,11 @@ public class UserController {
     }
     //查询所有商品，判断是否有类别传入，若有则按类别查询
     @RequestMapping("/queryGoods")
-    public String queryGoods( Model model,HttpServletRequest request){
+    public String queryGoods( Model model,HttpServletRequest request,HttpSession session){
+        if (session.getAttribute("USER_SESSION") == null) {
+            // 如果用户未登录，则跳转到登录页面
+            return "redirect:/user/goLogin";
+        }
         String category=request.getParameter("category");
         System.out.println(category);
         List<Goods> list=new ArrayList<Goods>();
@@ -120,6 +124,7 @@ public class UserController {
         if(list==null){
             model.addAttribute("error","未查到");
         }
+        request.setAttribute("List",list);
         model.addAttribute("List",list);
         return "main";
     }
@@ -154,6 +159,10 @@ public class UserController {
     //用户的我的购物车
     @RequestMapping("/MyCart")
     public String myCart(HttpSession session){
+        if (session.getAttribute("USER_SESSION") == null) {
+            // 如果用户未登录，则跳转到登录页面
+            return "redirect:/user/goLogin";
+        }
         List<Goods> list=new ArrayList<Goods>();
         int uid= (int) session.getAttribute("UID");
         list= userService.queryGoodsByIdAndCart(uid);
@@ -191,12 +200,13 @@ public class UserController {
         }
         for(int i=0;i<selectedRows.length;i++){
             uid= Integer.parseInt(rows[i][0]);
-            count= Integer.parseInt(rows[i][1]);
             allprice+=Double.parseDouble(rows[i][2]);
             gid= Integer.parseInt(rows[i][3]);
+            count= userService.queryGoodById(uid,gid).getCart();
             list.add(userService.queryGoodById(uid,gid));
             session.setAttribute("list2",list);
         }
+
         session.setAttribute("TOTAL",allprice);
         return "order";
     }
@@ -226,7 +236,11 @@ public class UserController {
     }
     //查看我的订单
     @RequestMapping("/goMyOrder")
-    public ModelAndView order(HttpSession session,HttpServletRequest request){
+    public Object order(HttpSession session, HttpServletRequest request){
+        if (session.getAttribute("USER_SESSION") == null) {
+            // 如果用户未登录，则跳转到登录页面
+            return "redirect:/user/goLogin";
+        }
         String situation=request.getParameter("situation");
         List<Order> list= new ArrayList<>();
         ModelAndView mv = new ModelAndView("MyOrder");
@@ -256,8 +270,16 @@ public class UserController {
     @RequestMapping("/deliver")
     public String deliverOrder(@RequestParam("oid") int oid) {
         // 根据订单号更新数据库中的订单状态为已发货
-        userService.updateOrderStatus(oid);
+        userService.updateOrderStatus(oid,"已发货");
         return "redirect:/orderManage"; // 重定向到订单管理页面
+    }
+    //用户收获操作
+    @RequestMapping("/delivery")
+    public String deliveryOrder(@RequestParam("oid") int oid) {
+        // 根据订单号更新数据库中的订单状态为已发货
+        System.out.println("enter delivery");
+        userService.updateOrderStatus(oid,"已收货");
+        return "redirect:/goMyOrder"; // 重定向到订单管理页面
     }
     //商家查看未发货订单
     @RequestMapping("/unshipped")
@@ -278,14 +300,10 @@ public class UserController {
         session.setAttribute("GoodDescription",goods);
         return "goodDescription";
     }
-//    @RequestMapping("/isCourseExist")
-//    public void isCourseExit(String name, HttpServletResponse response) throws IOException {
-//        System.out.println("para-->"+name);
-//        response.setCharacterEncoding("utf-8");
-//        if (courseService.isCourseExit(name)){
-//            response.getWriter().print("该课程名已存在，请修改");
-//        }else{
-//            response.getWriter().close();
-//        }
-//    }
+
+    @RequestMapping("/updateCartAmount")
+    public String updateCart(@RequestParam("gid") Integer gid,@RequestParam("cart") Integer cart) {
+        boolean result = userService.updateCartAmount(gid, cart);
+        return "redirect:/MyCart";
+    }
 }
